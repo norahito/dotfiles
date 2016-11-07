@@ -1,0 +1,24 @@
+gitのbranch名表示と補完機能の有効化
+1 ファイルの確認
+補完機能を利用するためにはgit-prompt.shとgit-completion.bashの2つのファイルが必要になる。
+下記のコマンドを実行して、上記のファイルが存在する場合は.bashrcの設定を行うだけで大丈夫。
+$ ls /usr/local/etc/bash_completion.d/
+(Homeblewを利用してgitをインストールしている場合には、すでに
+/usr/local/Cellar/git/1.7.4.2/etc/bash_completion.d/git-completion.bash
+の様な場所にファイルが存在するのでそれを/usr/local/etc/bash_completion.d/にリンクする。
+
+2 確認の結果ファイルが無ければgit-prompt.shとgit-completion.bashを「/usr/local/etc/bash_completion.d/」 に配置。
+$ cd /usr/local/etc/bash_completion.d/
+$ curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > git-completion.bash
+$ curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > git-prompt.sh
+
+3 .bashrcを設定
+gitの補完機能を有効化するために、.bashrcに下記の記述を追記。
+source /usr/local/etc/bash_completion.d/git-prompt.sh
+source /usr/local/etc/bash_completion.d/git-completion.bash
+ブランチ名を表示するために下記の記述も追記。
+GIT_PS1_SHOWDIRTYSTATE=true
+export PS1='\h\[\033[00m\]:\W\[\033[31m\]$(__git_ps1 [%s])\[\033[00m\]\$ '
+
+最後に.bashrcを再読み込み。
+$ source ~/.bashrc
